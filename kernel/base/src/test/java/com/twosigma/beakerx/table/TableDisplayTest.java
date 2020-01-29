@@ -498,13 +498,17 @@ public class TableDisplayTest {
   public void shouldSendCommMsgWhenStringFormatForTimesChange() throws Exception {
     //given
     TimeUnit days = TimeUnit.DAYS;
+    System.out.println("************* timeunit:" + days.toString());
     //when
     tableDisplay.setStringFormatForTimes(days);
     //then
+
+    System.out.println("************* tabledisp:" + tableDisplay.getStringFormatForTimes());
     assertThat(tableDisplay.getStringFormatForTimes()).isEqualTo(days);
     LinkedHashMap model = getModelUpdate();
     assertThat(model.size()).isEqualTo(1);
-    assertThat(model.get(STRING_FORMAT_FOR_TIMES)).isEqualTo(days.toString());
+    System.out.println("************* model:" + model.get(STRING_FORMAT_FOR_TIMES));
+    assertThat(model.get(STRING_FORMAT_FOR_TIMES)).isEqualTo(days);
   }
 
   @Test
