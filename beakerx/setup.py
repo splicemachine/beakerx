@@ -29,12 +29,10 @@ import os
 
 cmdclass = create_cmdclass(develop_wrappers=[
     'js',
-    'js-lab',
     'java',
     'javadoc',
 ], distribute_wrappers=[
     'js',
-    'js-lab',
     'java',
     'javadoc',
 ])
@@ -43,16 +41,12 @@ cmdclass['js'] = install_node_modules(
     build_dir=os.path.join(here, '../js/notebook', 'dist'),
     source_dir=os.path.join(here, '../js/notebook', 'src')
 )
-cmdclass['js-lab'] = install_node_modules(
-    path='../js/lab',
-    build_dir=os.path.join(here, '../js/lab', 'dist'),
-    source_dir=os.path.join(here, '../js/lab', 'src')
-)
+
 cmdclass['java'] = run_gradle(cmd='build')
 cmdclass['javadoc'] = run_gradle(cmd='base:javadoc')
 
 setup_args = dict(
-    name                = 'beakerx',
+    name                = 'pysplice-beakerx',
     description         = 'BeakerX: Beaker Extensions for Jupyter Notebook',
     long_description    = 'BeakerX: Beaker Extensions for Jupyter Notebook',
     version             = get_version(os.path.join('beakerx', '_version.py')),
@@ -112,3 +106,4 @@ setup_args = dict(
 
 if __name__ == '__main__':
     setup(**setup_args)
+                                           
