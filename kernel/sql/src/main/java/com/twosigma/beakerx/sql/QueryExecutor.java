@@ -25,6 +25,7 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.sql.Connection;
+import java.sql.Statement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,7 +42,7 @@ public class QueryExecutor {
   protected final JDBCClient jdbcClient;
 
   private Connection connection;
-  private PreparedStatement statement;
+  private Statement statement;
 
   public QueryExecutor(JDBCClient jdbcClient) {
     this.jdbcClient = jdbcClient;
@@ -187,51 +188,67 @@ public class QueryExecutor {
 
     QueryResult queryResult = new QueryResult();
 
-    try (PreparedStatement statement = conn.prepareStatement(queryLine.getResultQuery())) {
-      this.statement = statement;
-      int n = 1;
-      for (BeakerInputVar parameter : queryLine.getInputVars()) {
-        if(parameter.getErrorMessage() != null) throw new ReadVariableException(parameter.getErrorMessage());
-        Object obj;
-        try {
-          obj = namespaceClient.get(parameter.objectName);
+    boolean hasResultSet=false;
+    ResultSet rs = null;
 
-          if (!parameter.isArray() && !parameter.isObject()) {
-            statement.setObject(n, obj);
-          } else if (!parameter.isArray() && parameter.isObject()) {
-            statement.setObject(n, getValue(obj, parameter.getFieldName()));
-          } else if (parameter.isArray()) {
-            int index;
-            if (currentIterationIndex > 0 && parameter.isAll()) {
-              index = currentIterationIndex;
-            } else {
-              index = parameter.index;
-            }
-            if (!parameter.isObject()) {
-              if (obj instanceof List) {
-                statement.setObject(n, ((List) obj).get(index));
-              } else if (obj.getClass().isArray()) {
-                Object arrayElement = Array.get(obj, index);
-                statement.setObject(n, arrayElement);
+    try {
+      if(queryLine.getInputVars() != null && queryLine.getInputVars().size() > 1) {
+        PreparedStatement  statement = conn.prepareStatement(queryLine.getResultQuery());
+        this.statement = statement;
+        int n = 1;
+        for (BeakerInputVar parameter : queryLine.getInputVars()) {
+          if (parameter.getErrorMessage() != null) throw new ReadVariableException(parameter.getErrorMessage());
+          Object obj;
+          try {
+            obj = namespaceClient.get(parameter.objectName);
+
+            if (!parameter.isArray() && !parameter.isObject()) {
+              statement.setObject(n, obj);
+            } else if (!parameter.isArray() && parameter.isObject()) {
+              statement.setObject(n, getValue(obj, parameter.getFieldName()));
+            } else if (parameter.isArray()) {
+              int index;
+              if (currentIterationIndex > 0 && parameter.isAll()) {
+                index = currentIterationIndex;
+              } else {
+                index = parameter.index;
               }
-            } else {
-              if (obj instanceof List) {
-                statement.setObject(n, getValue(((List) obj).get(index), parameter.getFieldName()));
-              } else if (obj.getClass().isArray()) {
-                Object arrayElement = Array.get(obj, index);
-                statement.setObject(n, getValue(arrayElement, parameter.getFieldName()));
+              if (!parameter.isObject()) {
+                if (obj instanceof List) {
+                  statement.setObject(n, ((List) obj).get(index));
+                } else if (obj.getClass().isArray()) {
+                  Object arrayElement = Array.get(obj, index);
+                  statement.setObject(n, arrayElement);
+                }
+              } else {
+                if (obj instanceof List) {
+                  statement.setObject(n, getValue(((List) obj).get(index), parameter.getFieldName()));
+                } else if (obj.getClass().isArray()) {
+                  Object arrayElement = Array.get(obj, index);
+                  statement.setObject(n, getValue(arrayElement, parameter.getFieldName()));
+                }
               }
             }
+            n++;
+          } catch (Exception e) {
+            throw new ReadVariableException(parameter.objectName, e);
           }
-          n++;
-        } catch (Exception e) {
-          throw new ReadVariableException(parameter.objectName, e);
         }
+        hasResultSet = statement.execute();
+        if(hasResultSet)
+          rs = statement.getResultSet();
+      }
+      else {
+        Statement statement = conn.createStatement();
+        this.statement = statement;
+
+        hasResultSet = statement.execute(queryLine.getResultQuery());
+        if(hasResultSet)
+          rs = statement.getResultSet();
+
       }
 
-      boolean hasResultSet = statement.execute();
       if (hasResultSet) {
-        ResultSet rs = statement.getResultSet();
 
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
           queryResult.getColumns().add(rs.getMetaData().getColumnName(i));
