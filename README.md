@@ -13,6 +13,16 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 -->
+# Splice Notes
+There are some fixes and enhancments required by Splice which require changes to BeakerX code. BeakerX code is forked for this purpose.
+Splice is currently deployed with the released 1.3.0 version of BeakerX. Hence there is a branch splice_1.3.0 is created. This branch will be the Master for all Splice changes, and will be used to create the releases for deployment. 
+
+To work on jiras,you will need to create sub branch of splice_1.3.0
+   - git clone the splicemachine/beakerx
+   - git checkout splice_1.3.0
+   - git checkout -b DBAAS-XXXX splice_1.3.0
+   
+To Create PR, when you select to create pull request from the DBAAS-XXXX branch in the Create PR page make sure to select splice/beakerx, splice_1.3.0 as the base
 
 <img width="900" alt="banner" src="https://user-images.githubusercontent.com/963093/34594978-31d70312-f1a2-11e7-861c-705a9e932c3c.png">
 
