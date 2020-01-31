@@ -24,6 +24,8 @@ To work on jiras,you will need to create sub branch of splice_1.3.0
    
 To Create PR, when you select to create pull request from the DBAAS-XXXX branch in the Create PR page make sure to select splice/beakerx, splice_1.3.0 as the base
 
+Note: to build the install packages with the custom code, follow the steps in repo : https://github.com/splicemachine/beakerx-build
+
 <img width="900" alt="banner" src="https://user-images.githubusercontent.com/963093/34594978-31d70312-f1a2-11e7-861c-705a9e932c3c.png">
 
 # BeakerX: Beaker extensions for Jupyter
