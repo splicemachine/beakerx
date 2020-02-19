@@ -251,7 +251,11 @@ public class QueryExecutor {
       if (hasResultSet) {
 
         for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
-          queryResult.getColumns().add(rs.getMetaData().getColumnName(i));
+          String colName = rs.getMetaData().getColumnName(i);
+          if (queryResult.getColumns().contains(colName))
+            queryResult.getColumns().add(rs.getMetaData().getTableName(i) +"."+colName);
+          else
+            queryResult.getColumns().add(colName);
           queryResult.getTypes().add(rs.getMetaData().getColumnClassName(i));
         }
 
