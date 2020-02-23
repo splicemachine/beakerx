@@ -33,7 +33,7 @@ export class ToolbarSparkConnectionStatus {
       return;
     }
 
-    this.toolbarSparkStats.node.addEventListener('click', this.handleToolbarSparkClick);
+    //this.toolbarSparkStats.node.addEventListener('click', this.handleToolbarSparkClick);
   }
 
   destroy() {

@@ -33,4 +33,6 @@ public class SQLForColorTable {
   public static final String CREATE_AND_SELECT_ALL = "" +
           CREATE +
           "SELECT * FROM color WHERE name LIKE 'A%';";
+  public static final String SELECT_ALL = "" +
+          "SELECT * FROM color WHERE name LIKE 'A%';";
 }

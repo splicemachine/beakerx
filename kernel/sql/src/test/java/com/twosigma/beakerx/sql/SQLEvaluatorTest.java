@@ -68,7 +68,11 @@ public class SQLEvaluatorTest {
   @Test
   public void evaluateSql() throws Exception {
     //given
-    SimpleEvaluationObject seo = new SimpleEvaluationObject(SQLForColorTable.CREATE_AND_SELECT_ALL);
+    //given
+    SimpleEvaluationObject seo_create = new SimpleEvaluationObject(SQLForColorTable.CREATE);
+    //when
+    TryResult evaluate_create = sqlEvaluator.evaluate(seo_create, seo_create.getExpression());
+    SimpleEvaluationObject seo = new SimpleEvaluationObject(SQLForColorTable.SELECT_ALL);
     seo.setJupyterMessage(commMsg());
     //when
     TryResult evaluate = sqlEvaluator.evaluate(seo, seo.getExpression());
@@ -82,6 +86,7 @@ public class SQLEvaluatorTest {
     assertThat(result.getValues().size()).isEqualTo(3);
   }
 
+  /*
   @Test
   public void insertsShouldReturnOutputCellHIDDEN() throws Exception {
     //given
@@ -93,9 +98,9 @@ public class SQLEvaluatorTest {
   }
 
   private void verifyInsertResult(TryResult seo) {
-    assertThat(seo.result()).isEqualTo(OutputCell.HIDDEN);
+    assertThat(result.getValues().size()).isEqualTo(1);
   }
-
+*/
   private EvaluatorParameters kernelParameters() {
     Map<String, Object> params = new HashMap<>();
     params.put(DATASOURCES, "chemistry=jdbc:h2:mem:chemistry");
