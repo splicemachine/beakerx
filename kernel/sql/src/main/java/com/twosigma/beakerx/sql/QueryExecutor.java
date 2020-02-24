@@ -182,6 +182,9 @@ public class QueryExecutor {
         }
       }
     }
+    else {
+      resultsForOutputCell.add("Query executed successfully. Affected rows : 0");
+    }
   }
 
   private QueryResult executeQuery(int currentIterationIndex, BeakerParseResult queryLine, Connection conn, BeakerXClient namespaceClient) throws SQLException, ReadVariableException {

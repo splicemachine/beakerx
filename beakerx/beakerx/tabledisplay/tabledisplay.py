@@ -104,7 +104,7 @@ class Table(BaseObject):
         for index in range(len(args[0])):
             row = []
             for columnName in self.columnNames:
-                value = args[0][columnName].get_values()[index]
+                value = args[0][columnName].to_numpy()[index]
                 value_type = types_map.get(columnName)
                 row.append(self.convert_value(value, value_type))
             if not isinstance(args[0].index, RangeIndex):

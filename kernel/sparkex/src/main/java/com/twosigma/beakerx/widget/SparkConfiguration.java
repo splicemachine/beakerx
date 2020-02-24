@@ -41,7 +41,10 @@ public class SparkConfiguration extends VBox {
 
   private HTML sparkVersionWidget(String version) {
     HTML html = new HTML();
-    String ap = String.format("https://spark.apache.org/docs/%s/configuration.html#available-properties", version);
+    String sparkVersion = version;
+    if(version!= null && version.indexOf("-cdh") > 0)
+        sparkVersion = version.substring(0, (version.indexOf("-cdh")  ));
+    String ap = String.format("https://spark.apache.org/docs/%s/configuration.html#available-properties", sparkVersion);
     html.setValue("<a target=\"_blank\" href=\"" + ap + "\">Available properties" + "</a>");
     html.setDomClasses(new ArrayList<>(asList("bx-properties-add-label")));
     return html;

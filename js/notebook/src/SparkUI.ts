@@ -157,11 +157,11 @@ export class SparkUIView extends widgets.VBoxView {
     }
 
     this.connectionStatusElement.removeEventListener('click', this.openWebUi);
-    this.connectionStatusElement.addEventListener('click', this.openWebUi);
+    //this.connectionStatusElement.addEventListener('click', this.openWebUi);
     this.sparkStats.node.removeEventListener('click', this.openExecutors);
-    this.sparkStats.node.addEventListener('click', this.openExecutors);
-    this.connectionStatusElement.style.cursor = 'pointer';
-    this.sparkStats.node.style.cursor = 'pointer';
+    //this.sparkStats.node.addEventListener('click', this.openExecutors);
+    //this.connectionStatusElement.style.cursor = 'pointer';
+    //this.sparkStats.node.style.cursor = 'pointer';
     this.toolbarSparkConnectionStatus.bindToolbarSparkEvents();
   }
 
@@ -212,12 +212,12 @@ export class SparkUIView extends widgets.VBoxView {
                   clearTimeout(updateTimer);
                   updateTimer = setTimeout(() => {
                     this.handleLocalMasterUrl();
-                    this.toolbarSparkConnectionStatus.append();
+                    //this.toolbarSparkConnectionStatus.append();
                     this.addSparkUrls();
                     this.connectToApi();
                     this.handleFormState();
                     this.toggleExecutorConfigInputs();
-                    this.setupTooltips();
+                    //this.setupTooltips();
                     this.updateSparkStatsStyles();
                   }, 10);
                 });
