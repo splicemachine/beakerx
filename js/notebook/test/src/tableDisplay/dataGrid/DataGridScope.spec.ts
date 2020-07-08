@@ -34,12 +34,9 @@ describe('dataGridScope', () => {
   };
   const dataGridScope = new DataGridScope(scopeOptions);
 
-  it('should fail initialization', () => {
+  it('should fail initialization when data empty', () => {
     assert.throws(
-      () => { new DataGridScope({ ...scopeOptions, data: {} }); },
-      Error,
-      "Cannot read property 'slice' of undefined"
-    );
+      () => { new DataGridScope({ ...scopeOptions, data: {} }); }, Error, "options.data can not be empty"  );
   });
 
   it('should implement "render" method', () => {
