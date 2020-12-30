@@ -103,6 +103,7 @@ public class ClasspathAddMvnDepsCellMagicCommandTest {
     //then
     List<Message> stderr = EvaluatorResultTestWatcher.getStderr(kernel.getPublishedMessages());
     String text = (String) stderr.get(0).getContent().get("text");
+    System.out.println("********** "+ text);
     Assertions.assertThat(text).contains("Could not resolve dependencies for:");
     Assertions.assertThat(text).contains("com.google.code.XXXX : gson : 2.6.2");
   }

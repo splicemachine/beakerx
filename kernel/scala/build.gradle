@@ -22,53 +22,53 @@ ext.kernelIdName = 'scala'
 mainClassName = 'com.twosigma.beakerx.scala.kernel.Scala'
 
 configurations {
-  provided
-  antlr
+    provided
+    antlr
 }
 
 //need for compiling scala before java
 sourceSets {
-  main {
-    compileClasspath += configurations.provided
-    scala {
-      srcDirs = ['src/main/scala', 'src/main/java']
+    main {
+        compileClasspath += configurations.provided
+        scala {
+            srcDirs = ['src/main/scala', 'src/main/java']
+        }
+        java {
+            srcDirs = []
+        }
     }
-    java {
-      srcDirs = []
+    test {
+        compileClasspath += configurations.provided
+        runtimeClasspath += configurations.provided
     }
-  }
-  test {
-    compileClasspath += configurations.provided
-    runtimeClasspath += configurations.provided
-  }
 }
 
 repositories {
-  mavenCentral()
+    mavenCentral()
 }
 
 dependencies {
-  provided project(':base')
-  compile group: 'org.scala-lang', name: 'scala-compiler', version: '2.12.8'
-  compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.8'
-  compile group: 'jline', name: 'jline', version: '2.12'
+    provided project(':base')
+    compile group: 'org.scala-lang', name: 'scala-compiler', version: '2.12.8'
+    compile group: 'org.scala-lang', name: 'scala-library', version: '2.12.8'
+    compile group: 'jline', name: 'jline', version: '2.12'
 
-  testCompile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.0.4'
-  testCompile project(':base').sourceSets.test.output
+    testCompile group: 'org.scalatest', name: 'scalatest_2.12', version: '3.0.4'
+    testCompile project(':base').sourceSets.test.output
 }
 
 compileScala {
-  scalaCompileOptions.additionalParameters = ['-target:jvm-1.8']
+    scalaCompileOptions.additionalParameters = ['-target:jvm-1.8']
 }
 
 jar {
-  manifest {
-    attributes "Main-Class": "$mainClassName"
-  }
+    manifest {
+        attributes "Main-Class": "$mainClassName"
+    }
 }
 
 test {
-  maxHeapSize = '1800m'
+    maxHeapSize = '1800m'
 }
 
 task realclean
@@ -78,15 +78,15 @@ realclean.dependsOn(clean)
 // GroovyParserBaseListener.java GroovyParserListener.java
 
 publishing {
-  publications {
-    maven(MavenPublication) {
-      groupId 'com.twosigma'
-      artifactId 'beaker-kernel-scala'
-      version '2.0-SNAPSHOT'
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.twosigma'
+            artifactId 'beaker-kernel-scala'
+            version '2.0-SNAPSHOT'
 
-      from components.java
+            from components.java
+        }
     }
-  }
 }
 
 installDist.into new File(pathToStaticContent, kernelIdName)

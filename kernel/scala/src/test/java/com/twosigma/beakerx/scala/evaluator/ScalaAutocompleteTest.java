@@ -65,7 +65,7 @@ public class ScalaAutocompleteTest {
     scalaEvaluator.exit();
   }
 
-  @Test
+  //@Test
   public void autocomplete_autocompleteResultNotEmpty() throws Exception {
     //when
     AutocompleteResult autocomplete = scalaEvaluator.autocomplete("val numbers = Li", 16);
@@ -74,7 +74,7 @@ public class ScalaAutocompleteTest {
     Assertions.assertThat(autocomplete.getStartIndex()).isEqualTo(14);
   }
 
-  @Test
+  //@Test
   public void autocomplete_multiLineOffsetCorrect() throws Exception {
     //when
     AutocompleteResult autocomplete = scalaEvaluator.autocomplete("val x = 3\nval numbers = Li", 26);
@@ -83,7 +83,7 @@ public class ScalaAutocompleteTest {
     Assertions.assertThat(autocomplete.getStartIndex()).isEqualTo(24);
   }
 
-  @Test
+  //@Test
   public void autocomplete_namespaceShouldNotBeModified() {
     final String input1 = "val xyzzy = 32\nval xyz";
     //when
@@ -93,7 +93,7 @@ public class ScalaAutocompleteTest {
     Assertions.assertThat(autocomplete2.getMatches()).isEmpty();
   }
 
-  @Test
+  //@Test
   public void autocomplete_internalDeclarationsAreVisible() {
     final String lines = "val xyzzy = 32\nxyz";
     //when
@@ -102,7 +102,7 @@ public class ScalaAutocompleteTest {
     Assertions.assertThat(autocomplete.getMatches()).isNotEmpty();
   }
 
-  @Test
+  //@Test
   public void autocomplete_interpretedResultsVisible() {
     // This test needs a fresh ScalaEvaluator to modify without disturbing other tests
     final ScalaEvaluator localEvaluator =

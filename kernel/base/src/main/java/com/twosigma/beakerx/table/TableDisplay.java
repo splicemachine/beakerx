@@ -127,6 +127,7 @@ public class TableDisplay extends BeakerxWidget {
 
   public TableDisplay(List<List<?>> v, List<String> co, List<String> cl) {
     super();
+    setTimeZone(System.getenv("TZ"));
     values = new ArrayList<>();
     columns = co;
     classes = cl;
@@ -137,14 +138,17 @@ public class TableDisplay extends BeakerxWidget {
 
   public TableDisplay(Collection<Map<String, Object>> v) {
     this(v, new BasicObjectSerializer());
+    setTimeZone(System.getenv("TZ"));
   }
 
-  public TableDisplay(Map<String, Object>[] v) {
+  public TableDisplay(Map<String, Object>[] v) { 
     this(new ArrayList<>(Arrays.asList(v)), new BasicObjectSerializer());
+    setTimeZone(System.getenv("TZ"));
   }
 
   public TableDisplay(Collection<Map<String, Object>> v, BeakerObjectConverter serializer) {
     super();
+    setTimeZone(System.getenv("TZ"));
     values = new ArrayList<>();
     columns = new ArrayList<>();
     classes = new ArrayList<>();
@@ -210,6 +214,7 @@ public class TableDisplay extends BeakerxWidget {
 
   public TableDisplay(Map<?, ?> v) {
     super();
+    setTimeZone(System.getenv("TZ"));
     this.values = new ArrayList<>();
     this.columns = Arrays.asList("Key", "Value");
     this.classes = new ArrayList<>();
@@ -218,8 +223,9 @@ public class TableDisplay extends BeakerxWidget {
     addToValues(buildValuesFromMap(v));
   }
 
-  public TableDisplay(int rowCount, int columnCount, List<String> columnNames, Element element) {
+  public TableDisplay(int rowCount, int columnCount, List<String> columnNames, Element element) { 
     this(TableDisplayConverter.convert(rowCount, columnCount, columnNames, element));
+    setTimeZone(System.getenv("TZ"));
   }
 
   private void addToValues(List<List<?>> items) {

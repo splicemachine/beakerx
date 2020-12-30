@@ -20,6 +20,8 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.time.*;
+import java.text.DateFormat;
 
 public class TableDisplayConverter {
 
@@ -53,12 +55,16 @@ public class TableDisplayConverter {
     if (x instanceof Number) {
       return x;
     } else if (x instanceof Date) {
-      Date date = (Date) x;
+      Date d = (Date) x;
+      ZonedDateTime date1 = ZonedDateTime.ofInstant(d.toInstant(),ZoneId.systemDefault()).withZoneSameLocal(ZoneId.of("UTC"));
+      Date date = Date.from(date1.toInstant());
       return date;
     } else if (x instanceof String) {
       Date inputDate = null;
       try {
-        inputDate = new SimpleDateFormat("yyyy-MM-dd").parse((String) x);
+        Date id = new SimpleDateFormat("yyyy-MM-dd").parse((String) x);
+        ZonedDateTime date1 = ZonedDateTime.ofInstant(id.toInstant(),ZoneId.systemDefault()).withZoneSameLocal(ZoneId.of("UTC"));
+        inputDate = Date.from(date1.toInstant());
       } catch (ParseException e) {
         throw new IllegalArgumentException("time column accepts String date in a following format yyyy-MM-dd");
       }
