@@ -271,7 +271,14 @@ public class QueryExecutor {
               if (java.sql.Date.class.getName().equals(rs.getMetaData().getColumnClassName(i))) {
                 java.sql.Date sqlDate = rs.getDate(i);
                 row.add(sqlDate == null ? null : new Date(sqlDate.getTime()));
-              } else {
+              } else if (java.sql.Clob.class.getName().equals(rs.getMetaData().getColumnClassName(i))) {
+                java.sql.Clob clob = rs.getClob(i);
+                row.add(clob == null ? null : clob.getSubString(1, (int) clob.length()));
+              }else if (java.sql.Blob.class.getName().equals(rs.getMetaData().getColumnClassName(i))) {
+                java.sql.Blob blob = rs.getBlob(i);
+                row.add(blob == null ? null : blob.getBytes(1, (int) blob.length()));
+              }
+              else {
                 row.add(rs.getObject(i));
               }
             }
