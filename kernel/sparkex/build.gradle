@@ -36,8 +36,8 @@ dependencies {
     provided project(':base')
     provided project(':scala')
 
-    provided group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.0.0'
-    provided group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.0.0'
+    provided group: 'org.apache.spark', name: 'spark-core_2.12', version: '3.0.1'
+    provided group: 'org.apache.spark', name: 'spark-sql_2.12', version: '3.0.1'
     provided group: 'com.twosigma', name: 'flint', version: '0.6.0'
 
     testCompile group: 'org.scala-lang', name: 'scala-compiler', version: '2.12.8'

@@ -30,6 +30,6 @@ public class SparkEngineImplTest {
     //when
     String version = sparkEngine.sparkVersion();
     //then
-    assertThat(version).isEqualTo("3.0.0");
+    assertThat(version).isEqualTo("3.0.1");
   }
 }
