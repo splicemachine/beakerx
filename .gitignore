@@ -79,3 +79,6 @@ cscope.po.out
 .settings/
 .recommenders/
 RemoteSystemsTempFiles/
+
+
+.DS_Store
