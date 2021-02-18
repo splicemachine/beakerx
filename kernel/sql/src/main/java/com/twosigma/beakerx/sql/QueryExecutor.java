@@ -155,35 +155,41 @@ public class QueryExecutor {
     if (queryLine.isSelectInto() && resultsForNamspace.get(queryLine.selectIntoVar) == null) {
       resultsForNamspace.put(queryLine.selectIntoVar, new ArrayList<>());
     }
-    if (queryResult.getValues().size() > 1) {
-      TableDisplay tableDisplay = new TableDisplay(queryResult.getValues(), queryResult.getColumns(), queryResult.getTypes());
-      if (!queryLine.isSelectInto()) {
-        resultsForOutputCell.add(tableDisplay);
+    if (queryResult.getHasResultSet()) {
+      if (queryResult.getValues().size() > 1) {
+        TableDisplay tableDisplay = new TableDisplay(queryResult.getValues(), queryResult.getColumns(), queryResult.getTypes());
+        if (!queryLine.isSelectInto()) {
+          resultsForOutputCell.add(tableDisplay);
+        } else {
+          resultsForNamspace.get(queryLine.selectIntoVar).add(tableDisplay);
+        }
+      } else if (queryResult.getValues().size() == 1) {
+        List<Object> row = ((List<Object>) queryResult.getValues().get(0));
+        if (row.size() == 1) {
+          if (!queryLine.isSelectInto()) {
+            resultsForOutputCell.add(row.get(0));
+          } else {
+            resultsForNamspace.get(queryLine.selectIntoVar).add(row.get(0));
+          }
+        } else if (row.size() > 1) {
+          Map<String, Object> map = new LinkedHashMap<>();
+          for (int i = 0; i < row.size(); i++) {
+            map.put(queryResult.getColumns().get(i), row.get(i));
+          }
+          if (!queryLine.isSelectInto()) {
+            resultsForOutputCell.add(map);
+          } else {
+            resultsForNamspace.get(queryLine.selectIntoVar).add(map);
+          }
+        }
       } else {
-        resultsForNamspace.get(queryLine.selectIntoVar).add(tableDisplay);
+        resultsForOutputCell.add("Query executed successfully.");
       }
-    } else if (queryResult.getValues().size() == 1) {
-      List<Object> row = ((List<Object>) queryResult.getValues().get(0));
-      if (row.size() == 1) {
-        if (!queryLine.isSelectInto()) {
-          resultsForOutputCell.add(row.get(0));
-        } else {
-          resultsForNamspace.get(queryLine.selectIntoVar).add(row.get(0));
-        }
-      } else if (row.size() > 1) {
-        Map<String, Object> map = new LinkedHashMap<>();
-        for (int i = 0; i < row.size(); i++) {
-          map.put(queryResult.getColumns().get(i), row.get(i));
-        }
-        if (!queryLine.isSelectInto()) {
-          resultsForOutputCell.add(map);
-        } else {
-          resultsForNamspace.get(queryLine.selectIntoVar).add(map);
-        }
-      }
-    }
-    else {
-      resultsForOutputCell.add("Query executed successfully. Affected rows : 0");
+    } else { //update, so get the number of roows updated
+        if(queryResult.getUpdateCount() > -1)
+            resultsForOutputCell.add("Statement executed successfully. Affected rows : " + queryResult.getUpdateCount());
+        else
+            resultsForOutputCell.add("Statement executed successfully.");
     }
   }
 
@@ -192,6 +198,7 @@ public class QueryExecutor {
     QueryResult queryResult = new QueryResult();
 
     boolean hasResultSet=false;
+    int executeUpdateCnt = -1;
     ResultSet rs = null;
 
     try {
@@ -240,6 +247,9 @@ public class QueryExecutor {
         hasResultSet = statement.execute();
         if(hasResultSet)
           rs = statement.getResultSet();
+        else
+          executeUpdateCnt = statement.getUpdateCount();
+
       }
       else {
         Statement statement = conn.createStatement();
@@ -248,8 +258,12 @@ public class QueryExecutor {
         hasResultSet = statement.execute(queryLine.getResultQuery());
         if(hasResultSet)
           rs = statement.getResultSet();
+        else
+          executeUpdateCnt = statement.getUpdateCount();
 
       }
+
+      queryResult.setHasResultSet(hasResultSet);
 
       if (hasResultSet) {
 
@@ -285,6 +299,9 @@ public class QueryExecutor {
           }
         }
       }
+      else {
+        queryResult.setUpdateCount(executeUpdateCnt);
+      }
 
     } catch (SQLException e) {
       //Logger.getLogger(QueryExecutor.class.getName()).log(Level.SEVERE, null, e);
@@ -313,6 +330,17 @@ public class QueryExecutor {
     List<List<?>> values = new ArrayList<>();
     List<String> columns = new ArrayList<>();
     List<String> types = new ArrayList<>();
+
+    boolean hasResultSet = true;
+    int updateCount =0;
+
+    public int getUpdateCount() { return updateCount; }
+
+    public void setUpdateCount(int updateCount) { this.updateCount = updateCount; }
+
+    public boolean getHasResultSet() { return hasResultSet; }
+
+    public void setHasResultSet(boolean hasResultSet) { this.hasResultSet = hasResultSet; }
 
     public List<List<?>> getValues() {
       return values;
